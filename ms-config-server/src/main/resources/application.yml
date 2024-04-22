@@ -8,7 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Mark-Pino/Zapatillas.git
+          uri: https://github.com/haelMC/ropita.git
           #username:
           #password:
           search-paths: config-data
@@ -16,4 +16,4 @@ spring:
   security:
     user:
       name: root
-      password: s3cr3t
+      password: 1234567
