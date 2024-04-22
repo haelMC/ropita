@@ -33,18 +33,6 @@ spring:
           uri: lb://venta-service
           predicates:
             - Path=/venta/**
-        - id: ms-procesamiento-pedidos-service
-          uri: lb://ms-procesamiento-pedidos-service
-          predicates:
-            - Path=/pedido/**
-        - id: ms-auth-service
-          uri: lb://ms-auth-service
-          predicates:
-            - Path=/auth/**
-        - id: venta-service
-          uri: lb://venta-service
-          predicates:
-            - Path=/venta/**
         - id: producto-service
           uri: lb://producto-service
           predicates:
@@ -57,15 +45,7 @@ spring:
           uri: lb://ms-pago-service
           predicates:
             - Path=/pago/**
-        - id: ms-inventario-service
-          uri: lb://ms-inventario-service
-          predicates:
-            - Path=/inventario/**
         - id: ms-proveedor-service
           uri: lb://ms-proveedor-service
           predicates:
             - Path=/proveedor/**
-        - id: ms-factura-service
-          uri: lb://ms-factura-service
-          predicates:
-            - Path=/factura/**
