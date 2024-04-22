@@ -10,17 +10,20 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MsClienteApplication {
 
+	// Método principal para iniciar la aplicación Spring Boot
 	public static void main(String[] args) {
 		SpringApplication.run(MsClienteApplication.class, args);
 	}
+
+	// Bean para configurar la documentación de OpenAPI
 	@Bean
-	public OpenAPI custumOpenAPI() {
+	public OpenAPI customOpenAPI() {
 		return new OpenAPI().info(new Info()
-				.title("OPEN API MICROSERVICIO CLIENTE")
-				.version("0.0.1")
-				.description("servicio web cliente")
-				.termsOfService("http://swagger.io/terms")
-				.license(new License().name("Apache 2.0").url("http://springdoc.org"))
+				.title("OPEN API MICROSERVICIO CLIENTE") // Título de la documentación
+				.version("0.0.1") // Versión del microservicio
+				.description("servicio web cliente") // Descripción del microservicio
+				.termsOfService("http://swagger.io/terms") // URL de los términos de servicio
+				.license(new License().name("Apache 2.0").url("http://springdoc.org")) // Información de la licencia
 		);
 	}
 }
