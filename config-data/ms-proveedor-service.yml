@@ -25,15 +25,3 @@ eureka: # Configuración del cliente Eureka para el registro del servicio
       defaultZone: ${EUREKA_URI:http://localhost:8070/eureka} # URL del servidor Eureka donde se registra el servicio
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}} # Identificador único de la instancia del servicio registrado en Eureka
-
-resilience4j.circuitbreaker: # Configuración del circuit breaker de Resilience4j
-  instances:
-    proveedorListarPorIdCB: # Nombre del circuit breaker para la operación de listar por ID de proveedor
-      registerHealthIndicator: true # Habilita el indicador de salud para monitorear el estado del circuit breaker
-      slidingWindowSize: 10 # Tamaño de la ventana deslizante para recopilar estadísticas de llamadas
-      permittedNumberOfCallsInHalfOpenState: 3 # Número máximo de llamadas permitidas en el estado semiabierto
-      slidingWindowType: TIME_BASED # Tipo de ventana deslizante basada en el tiempo
-      minimumNumberOfCalls: 4 # Número mínimo de llamadas antes de que se active el circuit breaker
-      waitDurationInOpenState: 5s # Duración de espera en el estado abierto antes de pasar al estado semiabierto
-      failureRateThreshold: 50 # Umbral de tasa de falla para activar el circuit breaker
-      eventConsumerBufferSize: 10 # Tamaño del búfer del consumidor de eventos para recopilar estadísticas
