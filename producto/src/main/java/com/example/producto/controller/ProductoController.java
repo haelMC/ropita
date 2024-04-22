@@ -14,47 +14,57 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/producto")
 public class ProductoController {
+    // Inyección de dependencia del servicio de Producto
     @Autowired
     private ProductoService productoService;
 
+    // Método para obtener todos los productos
     @GetMapping()
     public ResponseEntity<List<Producto>> list() {
+        // Devuelve todos los productos disponibles
         return ResponseEntity.ok().body(productoService.listar());
     }
 
+    // Método para guardar un nuevo producto
     @PostMapping()
     public ResponseEntity<Producto> save(@RequestBody Producto producto) {
+        // Guarda un nuevo producto y devuelve el producto guardado
         return ResponseEntity.ok(productoService.guardar(producto));
     }
 
+    // Método para actualizar un producto existente
     @PutMapping()
     public ResponseEntity<Producto> update(@RequestBody Producto producto) {
+        // Actualiza un producto existente y devuelve el producto actualizado
         return ResponseEntity.ok(productoService.actualizar(producto));
     }
 
+    // Método para obtener un producto por su ID
     @CircuitBreaker(name = "listByIdCB", fallbackMethod = "fallBacklistById")
     @GetMapping("/{id}")
     public ResponseEntity<Producto> listById(@PathVariable(required = true) Integer id) {
+        // Obtiene un producto por su ID y lo devuelve
         return ResponseEntity.ok().body(productoService.listarPorId(id).get());
     }
 
+    // Método para eliminar un producto por su ID
     @CircuitBreaker(name = "deleteByIdCB", fallbackMethod = "fallBackDeleteById")
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable(required = true) Integer id) {
+        // Elimina un producto por su ID y devuelve un mensaje de confirmación
         productoService.eliminarPorId(id);
         return "Eliminacion Correcta";
     }
 
-    // resilencia
-    private ResponseEntity<Producto> fallBacklistById(@PathVariable(required = true) Integer id, RuntimeException e) {
-        Producto producto = new Producto();
-        producto.setId(90000);
-        producto.setNombre("Recurso no disponible Nombre");
-        return ResponseEntity.ok().body(producto);
+    // Método de respaldo para la eliminación por ID en caso de error
+    private String fallBackDeleteById(@PathVariable(required = true) Integer id, RuntimeException e) {
+        // Devuelve una respuesta alternativa en caso de error al eliminar un producto por su ID
+        return "Error al eliminar el registro.";
     }
 
-    private ResponseEntity<String> fallBackDeleteById(@PathVariable(required = true) Integer id, RuntimeException e) {
-        // Aquí puedes devolver una respuesta alternativa en caso de error, por ejemplo:
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el registro.");
+    // Método de respaldo para obtener producto por ID en caso de error
+    private ResponseEntity<Producto> fallBacklistById(@PathVariable(required = true) Integer id, RuntimeException e) {
+        // Devuelve una respuesta alternativa en caso de error al obtener un producto por su ID
+        return ResponseEntity.notFound().build();
     }
 }

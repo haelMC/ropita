@@ -14,50 +14,51 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
+    // Inyección de dependencia del servicio de Categoría
     @Autowired
     private CategoriaService categoriaService;
 
+    // Método para obtener todas las categorías
     @GetMapping()
     public ResponseEntity<List<Categoria>> list() {
+        // Devuelve todas las categorías disponibles
         return ResponseEntity.ok().body(categoriaService.listar());
     }
 
+    // Método para guardar una nueva categoría
     @PostMapping()
     public ResponseEntity<Categoria> save(@RequestBody Categoria categoria) {
+        // Guarda una nueva categoría y devuelve la categoría guardada
         return ResponseEntity.ok(categoriaService.guardar(categoria));
     }
 
+    // Método para actualizar una categoría existente
     @PutMapping()
     public ResponseEntity<Categoria> update(@RequestBody Categoria categoria) {
+        // Actualiza una categoría existente y devuelve la categoría actualizada
         return ResponseEntity.ok(categoriaService.actualizar(categoria));
     }
 
+    // Método para obtener una categoría por su ID
     @CircuitBreaker(name = "listByIdCB", fallbackMethod = "fallBacklistById")
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> listById(@PathVariable(required = true) Integer id) {
+        // Obtiene una categoría por su ID y la devuelve
         return ResponseEntity.ok().body(categoriaService.listarPorId(id).get());
     }
 
+    // Método para eliminar una categoría por su ID
     @CircuitBreaker(name = "deleteByIdCB", fallbackMethod = "fallBackDeleteById")
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable(required = true) Integer id) {
+        // Elimina una categoría por su ID y devuelve un mensaje de confirmación
         categoriaService.eliminarPorId(id);
         return "Eliminacion Correcta";
     }
 
-    // resilencia
-    private ResponseEntity<Categoria> fallBacklistById(@PathVariable(required = true) Integer id, RuntimeException e) {
-        Categoria categoria = new Categoria();
-        categoria.setId(90000);
-        categoria.setTitulo("Recurso no disponible del Titulo de la categoria");
-        categoria.setDescripccion("Recurso no disponible de la Descripccion de la categoria");
-
-        return ResponseEntity.ok().body(categoria);
-    }
-
+    // Método de respaldo para la eliminación por ID en caso de error
     private ResponseEntity<String> fallBackDeleteById(@PathVariable(required = true) Integer id, RuntimeException e) {
-        // Aquí puedes devolver una respuesta alternativa en caso de error, por ejemplo:
+        // Devuelve una respuesta alternativa en caso de error al eliminar una categoría por su ID
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el registro.");
     }
-
 }

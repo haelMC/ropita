@@ -10,11 +10,20 @@ import lombok.Data;
 @Entity
 @Data
 public class Categoria {
+    // Identificador único de la categoría
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    // Título de la categoría
     private String titulo;
-    private String descripccion;
+
+    // Descripción de la categoría
+    private String descripccion; // Parece haber un error en el nombre del atributo "descripción"
+
+    // Etiqueta asociada a la categoría
     private String etiqueta;
+
+    // Color asociado a la categoría
     private String color;
 }
